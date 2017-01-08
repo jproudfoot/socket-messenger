@@ -1,0 +1,46 @@
+.login {
+	background: #000;
+	color: white;
+	font-size: 3vw;
+	
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	text-align: center;
+}
+
+.app-name {
+	text-align: left;
+	margin: 5px;
+}
+
+.title {
+	margin-top: 25vh;
+	margin-bottom: 3vh;
+}
+
+.usernameInput{
+	background-color: transparent;
+	border: none;
+	border-bottom: 2px solid #fff;
+	outline: none;
+	text-align: center;
+	width: 400px;
+	
+	width: 20%;
+	color: white;
+	font-size: 3vw;
+}
+
+.usernameSubmit {
+	margin-left: vw;
+	font-size: 3vw;
+}
+
+.usernameSubmit:hover {
+	color: red;
+}
+
+.hidden {
+	display: none;
+}

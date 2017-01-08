@@ -1,0 +1,22 @@
+{
+  "name": "socket-chat-example",
+  "version": "0.0.1",
+  "description": "my first socket.io app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "dompurify": "^0.8.4",
+    "express": "^4.14.0",
+    "font-awesome": "^4.7.0",
+    "jsdom": "^9.9.1",
+    "mongoose": "^4.7.6",
+    "socket.io": "^1.7.2",
+    "validate.js": "^0.11.1",
+    "validator": "^6.2.1"
+  }
+}

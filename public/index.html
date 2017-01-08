@@ -1,0 +1,83 @@
+<!doctype html> <html> <head> <title>Socket.IO chat</title> <style> * { margin: 0; padding: 0; box-sizing: border-box; } body { font: 13px Helvetica, Arial; } .form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; } .form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; } .form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; } #messages { list-style-type: none; margin: 0; padding: 0; } #messages li { padding: 5px 10px; } #messages li:nth-child(odd) { background: #eee; } </style>  <link rel="stylesheet" href="/fa/css/font-awesome.min.css"> <link rel="stylesheet" href="/style.css"></head> 
+
+<body> 
+	
+	<div class='login'>
+		<h5 class="app-name">Socket Chat</h5>
+		<h2 class="title">What is your username?</h2>
+		<input id="usr" class="usernameInput" type="text" maxLength="14" />
+		<i class="fa fa-arrow-right usernameSubmit" aria-hidden="true"></i>
+	</div>
+	
+	<ul id="messages"></ul>
+	
+	<div class="form hidden"> 
+		<input id="m" autocomplete="off"  placeholder ="Type here..."/>
+		<button>Send</button>
+	</div>
+		
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+		<script>
+		//Color for username
+		var COLORS = [
+		    '#e21400', '#91580f', '#f8a700', '#f78b00',
+		    '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
+		    '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+		 ];
+		function getUsernameColor (username) {
+		    // Compute hash code
+		    var hash = 7;
+		    for (var i = 0; i < username.length; i++) {
+		       hash = username.charCodeAt(i) + (hash << 5) - hash;
+		    }
+		    // Calculate color
+		    var index = Math.abs(hash % COLORS.length);
+		    return COLORS[index];
+		  }
+		
+			//Enter handlers for text fields
+		  $("#usr").keydown(function(e){
+		      if(e.which === 13){
+		          $(".usernameSubmit").click();
+		      }
+		  });
+		  $("#m").keydown(function(e){
+		      if(e.which === 13){
+		          $("button").click();
+		      }
+		  });
+		
+		var socket = io();
+		
+		//Send username information
+		$('.usernameSubmit').click(function() {
+			socket.username = $('#usr').val();
+			socket.emit('new username', socket.username);
+			$(this).parent().fadeOut();
+			$('.form').removeClass('hidden');
+		});
+		
+		//Chat message sent
+		$('button').click(function(event){
+			var msg = $('#m').val();
+			socket.emit('chat message', msg);
+			$('#messages').append('<li><span style="color:' + getUsernameColor(socket.username) + '">' + socket.username + '</span>: ' + msg);
+			$('#m').val('');
+			return false;
+		});
+		
+		//Chat message received from server
+		socket.on('chat message', function(msg){
+			$('#messages').append('<li><span style="color:' + getUsernameColor(msg.username) + '">' + msg.username + '</span>: ' + msg.message);
+		});
+		
+		//Load past messages on startup
+		socket.on('past messages', function(msgs) {
+			for (i = msgs.length-1; i >= 0; i--) {
+				$('#messages').append('<li><span style="color:' + getUsernameColor(msgs[i].username) + '">' + msgs[i].username + '</span>: ' + msgs[i].message);
+			}
+		});
+		</script>
+	</body>
+	</html>
